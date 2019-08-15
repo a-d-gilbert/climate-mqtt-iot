@@ -1,2 +1,2 @@
 # climate-mqtt-iot
-Home temperature sensor network getting read and looged to a postgres db.
+Home temperature sensor network reading and logging to a postgres db.
