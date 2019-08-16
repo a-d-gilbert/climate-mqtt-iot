@@ -4,7 +4,9 @@ import psycopg2 as pg
 import json
 
 credsfile = 'creds.json'
-configfile= 'config.json'
+configfile = 'config.json'
+subsfile = 'subs.json'
+topics = []
 
 def get_connection(credsfile, configfile):
     uname = ''
@@ -25,6 +27,19 @@ def get_connection(credsfile, configfile):
     conn = pg.connect(host=hname, database=db, user=uname, password=psk)
 
     return conn
+
+def get_subscriptions(subsfile):
+    topics = []
+    
+    with open(subsfile) as sf:
+        subs = json.load(sf)
+        
+        for topic in subs['topics']:
+            topics.append((topic['topic'], topic['qos']))
+            
+    return topics
+        
+        
 
 def on_message(client, data, message):
 
@@ -48,6 +63,8 @@ def on_message(client, data, message):
         if conn is not None:
             conn.close()
 
+            
+topics = get_subscriptions(subsfile)
 client =  mqtt.Client('climate_sub')
 client.on_message = on_message
 
@@ -55,5 +72,5 @@ client.connect('localhost', 1883)
 
 while True:
     client.loop_start()
-    client.subscribe('house/temp/lr')
+    client.subscribe(topics)
     client.loop_stop()
