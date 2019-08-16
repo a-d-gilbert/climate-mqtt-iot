@@ -1,0 +1,7 @@
+{
+  "topics":[
+    {"topic":"sub/path1","qos": 0},
+    {"topic":"sub/path2","qos": 1},
+    {"topic":"sub/path3","qos": 2},
+  ]
+}
